@@ -1,0 +1,3 @@
+friend:
+ADD$s0$s1$s1
+jfriend

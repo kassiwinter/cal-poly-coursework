@@ -1,0 +1,4 @@
+lab5:
+		javac lab4.java
+		java.c mipsEmulator.java
+		java.c branchPredictor.javax

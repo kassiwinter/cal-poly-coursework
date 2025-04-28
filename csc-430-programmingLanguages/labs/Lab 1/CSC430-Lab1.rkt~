@@ -1,0 +1,125 @@
+#lang racket
+(require rackunit)
+
+;> -- Walk Through Practice --
+;> This function adds two numbers together
+(define (add-nums a b)
+  (+ a b))
+
+(check-equal?(add-nums 3 4)7)
+
+
+;> -- 4.1 Simple Data --
+;> Exercise 15 - 
+;> This function takes in two Boolean values and returns True if the first is False or the second is True.
+(define(==> sunny friday)
+  (or (not sunny) friday))
+
+(check-equal?(==> #f #t) #t)
+(check-equal?(==> #f #f) #t)
+(check-equal?(==> #t #t) #t)
+(check-equal?(==> #t #f) #f)
+
+;> Exercise 19 -
+;> This function takes in a string and a number, inserting "_" at the position number of the string
+(define(string-insert str i)
+  (string-append (substring str 0 i) "_" (substring str i)))
+
+;> NOTE - "string-append" combines given strings together
+;>         "substring" creates a string starting at a beginning index to ending index (if given)
+
+(check-equal?(string-insert "Kass" 1) "K-ass")
+(check-equal?(string-insert "Kass" 0) "_Kass")
+(check-equal?(string-insert "Kass" 4) "Kass_")
+(check-equal?(string-insert "" 0) "_")
+
+;> Exercise 27 -
+;> This function takes all definitions in a given function and changes them are changed to constant definitions 
+(define attendees_total 120)
+(define attendee_ticket_price 5.0)
+(define attendee_ticket_price_increase 0.1)
+(define owner_fixed_cost 180)
+(define owner_ variable_cost 0.04)
+
+(define (attendees ticket-price)
+  (- attendees_total (* (- ticket-price attendee_ticket_price) (/ 15 attendee_ticket_price_increase))))
+
+(define (revenue ticket-price)
+  (* ticket-price (attendees ticket-price)))
+
+(define (cost ticket-price)
+  (+ owner_fixed_cost (* owner_ variable_cost (attendees ticket-price))))
+
+(define (profit ticket-price)
+  (- (revenue ticket-price)
+     (cost ticket-price)))
+
+(check-equal? (profit 0.0) -180.0))
+(check-equal? (profit 5.0) 0.0))
+(check-equal? (profit 10.0) 1980.0))
+(check-equal? (profit 20.0) 3000.0))
+
+
+;> -- 4.2 Intervals --
+;> Interest Exercise:
+;> This function takes in a deposit and returns the interest that the money earns in a year
+(define rate_base 0.04)
+(define deposit_base 1000)
+(define rate_middle 0.045)
+(define deposit_middle 5000)
+(define rate_top 0.05)
+
+
+(define (interest deposit)
+     (cond
+        ((<= deposit deposit_base) (* deposit rate_base))
+        ((<= deposit deposit_middle) (* deposit rate_middle))
+        (else (* deposit rate_top))))
+
+(check-equal? (interest 500) 20.0)
+(check-equal? (interest 3000) 135.0)
+(check-equal? (interest 10000) 500.0)
+
+;> -- 4.3 Types Racket --
+
+;> -- 4.4 Structures --
+;> Exercise 1:
+;> This structure defines a piece of desk furniture by its width, height, and depth
+(struct desks (width height depth))
+(define desk (desks 48 30 24))
+
+;> Exercise 2:
+;> This function takes in a desk object and returns its footprint (floorspace)
+(define (furniture-footprint desk)
+  (match desk ; NOTE - The "match" function extracts the details surrounding an object, allowing you to preform calculations on them
+    [(desks width _ depth) ;> NOTE - The "_" ignores the height since it's not needed for calculation
+     (* width depth)]))
+
+(define desk1 (desks 48 30 24))
+(define desk2 (desks 36 28 22))
+
+(check-equal? (furniture-footprint desk1) 1152)
+(check-equal? (furniture-footprint desk2) 792)
+
+;> Exercise 3:
+;> This structure defines a piece of bookshelf furniture by its depth, shelf number, and shelf width
+(struct bookshelves (depth num-shelves shelf-width))
+(define bookshelf (bookshelves 12 5 36))
+
+;> Exercise 4:
+;> This function takes in a piece of furniture and acciunts for it's type, finding its footprint (floorspace)
+(define (furniture-footprint-extended furniture)
+  (match furniture
+    [(desks width _ depth)
+     (* width depth)]
+    [(bookshelves _ num-shelves shelf-width)
+     (* depth num-shelves shelf-width)]))
+
+(define bookshelf1 (bookshelf 12 5 36))
+(define bookshelf2 (bookshelf 18 4 30))
+
+(check-equal? (furniture-footprint-extended desk1) 1152)
+(check-equal? (furniture-footprint-extended desk2) 792)
+(check-equal? (furniture-footprint-extended bookshelf1) 2160)
+(check-equal? (furniture-footprint-extended bookshelf1) 2160)
+
